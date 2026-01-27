@@ -25,8 +25,8 @@ The app allows users to enter their personal data (gender, height, weight, age) 
 
 ## 📸 Screenshots
 
-<img width="1080" height="2400" alt="Screenshot_1769535222" src="https://github.com/user-attachments/assets/36ca6ee3-401b-4a28-a8e6-32dd75b4a47f" />
-<img width="1080" height="2400" alt="Screenshot_1769535226" src="https://github.com/user-attachments/assets/09c741db-47ac-4e1e-9564-80a0b8141866" />
+<img width="180" height="260" alt="Screenshot_1769535222" src="https://github.com/user-attachments/assets/36ca6ee3-401b-4a28-a8e6-32dd75b4a47f" />
+<img width="180" height="260" alt="Screenshot_1769535226" src="https://github.com/user-attachments/assets/09c741db-47ac-4e1e-9564-80a0b8141866" />
 
 
 
