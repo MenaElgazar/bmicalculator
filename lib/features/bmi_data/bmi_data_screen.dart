@@ -1,4 +1,3 @@
-
 import 'package:bmicalculator/bmi_screen.dart';
 import 'package:bmicalculator/core/theme/color_manager.dart';
 import 'package:bmicalculator/core/theme/text_style.dart';
@@ -7,67 +6,115 @@ import 'package:bmicalculator/features/bmi_data/widgets/calculate_button.dart';
 import 'package:bmicalculator/features/bmi_data/widgets/gender_cart.dart';
 import 'package:bmicalculator/features/bmi_data/widgets/height_slider.dart';
 import 'package:bmicalculator/features/bmi_data/widgets/value_picker.dart';
+import 'package:bmicalculator/logic/cubit/bmi_cubit.dart';
+import 'package:bmicalculator/logic/cubit/bmi_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BmiDataScreen extends StatefulWidget {
+class BmiDataScreen extends StatelessWidget {
   const BmiDataScreen({super.key});
 
   @override
-  State<BmiDataScreen> createState() => _BmiDataScreenState();
-}
-
-class _BmiDataScreenState extends State<BmiDataScreen> {
-  Gender selectedgender=Gender.male;
-  double height=140;
-  int weight=40;
-  int age=10;
-  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(children: [
-         Text("BMI CALCULATOR",style: AppTextStyle.title20w700.copyWith(color:ColorManager.white),),
-           SizedBox(height: 30,),
-           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    final  cubitcontroller=context.read<BmiCubit>();
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
             children: [
-             GenderCart(icon:Icons.female, gender:Gender.female,  isSelected: selectedgender==Gender.female, onTap: (Gender gender) { setState(() {
-               selectedgender=gender;
-             }); },),
-             GenderCart(icon:Icons.male, gender: Gender.male,  isSelected: selectedgender==Gender.male, onTap: (Gender gender) { 
-              setState(() {
-                selectedgender=gender;
-              });
-              },),
-        
-           ],),
-           SizedBox(height: 20,),
-           HeightSlider(height: height, onChanged: (double value) { 
-            setState(() {
-              height=value;
-            });
-            },),
-            SizedBox(height: 20,),
-           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-           
-            children: [
-             ValuePicker(label: 'WEIGHT', value: weight, onChanged: (int value) { 
-              setState(() {
-                weight=value;
-              });
-              }, min: 20, max: 200, ),
-              ValuePicker(label: 'AGE', value: age, onChanged: (int value) { 
-                setState(() {
-                  age=value;
-                });
-               }, min: 1, max: 100,),
-           ],),
-           SizedBox(height: 20,),
-           CalculateButton(height: height, weight: weight, age: age, gender: selectedgender,),
-           
-        ],),
+              Text(
+                "BMI CALCULATOR",
+                style: AppTextStyle.title20w700.copyWith(
+                  color: ColorManager.white,
+                ),
+              ),
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  BlocBuilder<BmiCubit, BmiState>(
+                    builder: (context, state) {
+                      return GenderCart(
+                        icon: Icons.female,
+                        gender: Gender.female,
+                        isSelected: state.gender == Gender.female,
+                        onTap: cubitcontroller.toggleGender,
+                      );
+                    },
+                  ),
+                  BlocBuilder<BmiCubit, BmiState>(
+                    builder: (context, state) {
+                      return GenderCart(
+                        icon: Icons.male,
+                        gender: Gender.male,
+                        isSelected: state.gender == Gender.male,
+                        onTap: cubitcontroller.toggleGender,
+                      );
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              BlocBuilder<BmiCubit, BmiState>(
+                builder: (context, state) {
+                  return HeightSlider(
+                    height: state.height,
+                    onChanged: (val) =>
+                        cubitcontroller.updateHeight(val),
+                  );
+                },
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+          
+                children: [
+                  BlocBuilder<BmiCubit, BmiState>(
+                    builder: (context, state) {
+                      return ValuePicker(
+                        label: 'WEIGHT',
+                        value: state.weight,
+                        onChanged: (value) {
+                          cubitcontroller.updateWeight(value);
+                        },
+                        min: 20,
+                        max: 200,
+                      );
+                    },
+                  ),
+                  BlocBuilder<BmiCubit, BmiState>(
+                    builder: (context, state) {
+                      return ValuePicker(
+                        label: 'AGE',
+                        value: state.age,
+                        onChanged: (int value) {
+                          cubitcontroller.updateAge(value);
+                          
+                        },
+                        min: 1,
+                        max: 100,
+                      );
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              BlocBuilder<BmiCubit, BmiState>(
+                builder: (context, state) {
+                  return CalculateButton(
+                    
+                  
+                    height: state.height,
+                    weight: state.weight,
+                    age: state.age,
+                    gender: state.gender,
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

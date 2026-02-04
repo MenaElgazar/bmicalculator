@@ -1,10 +1,10 @@
 import 'dart:math';
 
-int calculateBmi({required double height, required int weight}) {
-  return (weight / pow((height / 100), 2)).toInt();
+double calculateBmi({required double height, required int weight}) {
+  return (weight / pow((height / 100), 2));
 }
 
-int getBmiLevel(int bmi,) {
+int getBmiLevel(double bmi,) {
   if (bmi < 18.5) {
     return 0;
   } else if (bmi >= 18.5 && bmi < 24.9) {

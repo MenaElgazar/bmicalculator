@@ -3,8 +3,9 @@ import 'package:bmicalculator/core/theme/text_style.dart';
 import 'package:flutter/material.dart';
 
 class BmiIndex extends StatelessWidget {
-  const BmiIndex({super.key, required this.level});
   final int level;
+
+  const BmiIndex({super.key, required this.level});
 
   @override
   Widget build(BuildContext context) {
